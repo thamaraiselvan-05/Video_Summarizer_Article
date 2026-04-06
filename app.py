@@ -99,9 +99,13 @@ if st.button(" Generate Smart Article"):
     else:
         st.warning("⚠️ Please enter a valid YouTube URL")
 
-text = get_transcript(url)
+try:
+    text = get_transcript(url)
 
-if "⚠️" in text:
-    st.error(text)
-else:
-    summary = summarize_text(text)
+    if "⚠️" in text:
+        st.error(text)
+    else:
+        summary = summarize_text(text)
+
+except ValueError as e:
+    st.error(str(e))

@@ -4,8 +4,13 @@ from youtube_transcript_api._errors import RequestBlocked
 def get_video_id(url):
     if "youtu.be/" in url:
         return url.split("youtu.be/")[1].split("?")[0]
-    elif "v=" in url:
+
+    elif "youtube.com/watch" in url:
         return url.split("v=")[1].split("&")[0]
+
+    elif "youtube.com/shorts/" in url:
+        return url.split("shorts/")[1].split("?")[0]
+
     else:
         raise ValueError("Invalid YouTube URL")
 
