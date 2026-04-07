@@ -1,33 +1,25 @@
 from fpdf import FPDF
 
-# ---------- CLEAN TEXT (Fix Unicode Issue) ----------
+# ---------- CLEAN TEXT ----------
 def clean_text(text):
-    # Replace common problematic Unicode characters
     replacements = {
-        "–": "-",   # en dash
-        "—": "-",   # em dash
-        "−": "-",   # minus sign
-        "‘": "'",   # left single quote
-        "’": "'",   # right single quote
-        "“": '"',   # left double quote
-        "”": '"',   # right double quote
-        "•": "-",   # bullet
-        "…": "...", # ellipsis
+        "–": "-", "—": "-", "−": "-",
+        "‘": "'", "’": "'",
+        "“": '"', "”": '"',
+        "•": "-", "…": "...",
     }
 
-    for key, value in replacements.items():
-        text = text.replace(key, value)
+    for k, v in replacements.items():
+        text = text.replace(k, v)
 
-    # FINAL SAFETY: remove ANY unsupported characters
-    text = text.encode("latin-1", "replace").decode("latin-1")
+    return text.encode("latin-1", "replace").decode("latin-1")
 
-    return text
 
-# ---------- CUSTOM PDF CLASS ----------
+# ---------- PDF CLASS ----------
 class PDF(FPDF):
     def header(self):
         self.set_font("Arial", "B", 16)
-        self.set_text_color(13, 71, 161)  # Blue tone
+        self.set_text_color(13, 71, 161)
         self.cell(0, 10, "AI Generated Article", ln=True, align="C")
         self.ln(5)
 
@@ -39,43 +31,48 @@ class PDF(FPDF):
 
 
 # ---------- CREATE PDF ----------
-def create_pdf(text, filename="output.pdf"):
+def create_pdf(text):
     pdf = PDF()
+    pdf.set_auto_page_break(auto=True, margin=15)
     pdf.add_page()
 
-    # Clean text BEFORE processing
     text = clean_text(text)
 
     for line in text.split("\n"):
         line = line.strip()
 
         if not line:
-            pdf.ln(4)
+            pdf.ln(3)
             continue
 
-        # ---------- TITLE ----------
-        if line.startswith("TITLE"):
+        # TITLE
+        if line.lower().startswith("title"):
             pdf.set_font("Arial", "B", 16)
             pdf.set_text_color(0, 0, 0)
-            pdf.ln(5)
+            pdf.multi_cell(0, 10, line.replace("TITLE:", "").strip())
+            pdf.ln(3)
 
-        # ---------- HEADINGS ----------
+        # HEADINGS
         elif line.isupper():
             pdf.set_font("Arial", "B", 14)
-            pdf.set_text_color(13, 71, 161)  # Blue
-            pdf.ln(4)
+            pdf.set_text_color(13, 71, 161)
+            pdf.ln(2)
+            pdf.multi_cell(0, 8, line)
 
-        # ---------- BULLET POINTS ----------
+        # BULLETS
         elif line.startswith("-") or line.startswith("•"):
             pdf.set_font("Arial", size=12)
             pdf.set_text_color(0, 0, 0)
-            line = "• " + line.lstrip("-• ").strip()
+            bullet = "• " + line.lstrip("-• ").strip()
+            pdf.multi_cell(0, 7, bullet)
 
-        # ---------- NORMAL TEXT ----------
+        # NORMAL TEXT
         else:
             pdf.set_font("Arial", size=12)
             pdf.set_text_color(0, 0, 0)
+            pdf.multi_cell(0, 7, line)
 
-        pdf.multi_cell(0, 8, line)
+    # 🔥 IMPORTANT FIX (for Streamlit)
+    pdf_bytes = pdf.output(dest="S").encode("latin-1")
 
-    pdf.output(filename)
+    return pdf_bytes

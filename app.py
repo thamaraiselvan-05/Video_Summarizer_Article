@@ -41,7 +41,13 @@ if st.button("🚀 Generate Article & PDF"):
                 article = generate_article(transcript, length)
 
                 # Create PDF
-                create_pdf(article)
+                pdf_bytes = create_pdf(article)
+
+                st.download_button(
+                     "📥 Download PDF",
+                      pdf_bytes,
+                      file_name="article.pdf",
+                      mime="application/pdf")
 
                 st.success("✅ Article generated!")
 
