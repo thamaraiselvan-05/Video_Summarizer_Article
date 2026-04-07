@@ -3,3 +3,4 @@ youtube-transcript-api
 fpdf
 python-dotenv
 groq
+yt-dlp

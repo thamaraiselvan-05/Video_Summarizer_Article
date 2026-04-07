@@ -15,24 +15,40 @@ length = st.selectbox(
     ["short", "medium", "long"])
 
 if st.button("🚀 Generate Article & PDF"):
-    
+
     if not url:
         st.warning("Please enter a YouTube URL")
-    
+
     else:
         with st.spinner("Processing..."):
-            transcript = get_transcript(url)
 
-            if "⚠️" in transcript:
-                st.error(transcript)
+            transcript, title, error = get_transcript(url)
+
+            if error:
+                st.error(error)
+
             else:
+                st.success("✅ Transcript extracted")
+
+                # Show video title
+                st.subheader(f"🎬 {title}")
+
+                #  Optional transcript preview
+                with st.expander("📄 View Transcript"):
+                    st.write(transcript[:2000])
+
+                #  Generate article
                 article = generate_article(transcript, length)
+
+                # Create PDF
                 create_pdf(article)
 
-                st.success("✅ Article Generated!")
+                st.success("✅ Article generated!")
 
-                st.subheader("📄 Article")
+                # Show article
+                st.subheader("📄 Generated Article")
                 st.text_area("", article, height=400)
 
+                #  Download button
                 with open("output.pdf", "rb") as f:
                     st.download_button("📥 Download PDF", f)
