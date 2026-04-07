@@ -6,9 +6,9 @@ client = Groq(api_key=os.getenv("GROQ_API_KEY"))
 def generate_article(transcript, length="medium"):
     
     length_map = {
-        "short": "around 300 words",
-        "medium": "around 600 words",
-        "long": "around 1000 words"
+        "Short": "around 300 words",
+        "Medium": "around 600 words",
+        "Long": "around 1000 words"
     }
 
     prompt = f"""
@@ -28,7 +28,7 @@ Transcript:
 """
 
     response = client.chat.completions.create(
-        model="llama3-70b-8192",
+        model="llama3-8b-8192",
         messages=[{"role": "user", "content": prompt}],
         temperature=0.7
     )
