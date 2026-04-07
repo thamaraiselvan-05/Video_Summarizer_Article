@@ -1,6 +1,6 @@
 import streamlit as st
 from transcript import get_transcript
-from summarizer import generate_article_with_groq
+from article_generator import generate_article_with_groq
 from pdf_generator import create_pdf
 import os
 
@@ -17,9 +17,8 @@ with col1:
 
 with col2:
     length = st.selectbox(
-        "Article Length",
-        ["Short", "Medium", "Long"]
-    )
+    "Article Length",
+    ["short", "medium", "long"])
 
 if st.button("🚀 Generate Article & PDF"):
     

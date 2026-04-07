@@ -4,11 +4,11 @@ import os
 client = Groq(api_key=os.getenv("GROQ_API_KEY"))
 
 def generate_article(transcript, length="medium"):
-    
+    length = length.lower()
     length_map = {
-        "Short": "Around 300 words",
-        "Medium": "Around 600 words",
-        "Long": "Around 1000 words"
+        "short": "Around 300 words",
+        "medium": "Around 600 words",
+        "long": "Around 1000 words"
     }
 
     prompt = f"""
