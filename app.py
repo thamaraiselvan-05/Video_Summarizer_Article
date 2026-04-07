@@ -126,5 +126,8 @@ if st.button("🚀 Generate Article & PDF"):
                 st.text_area("", article, height=400)
 
                 #  Download button
-                with open("output.pdf", "rb") as f:
-                    st.download_button("📥 Download PDF", f)
+                st.download_button(
+                     "📥 Download PDF",
+                      pdf_bytes,
+                      file_name="output.pdf",
+                      mime="application/pdf")
