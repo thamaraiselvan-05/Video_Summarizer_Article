@@ -1,28 +1,36 @@
-from google import genai
-from dotenv import load_dotenv
+from groq import Groq
 import os
 
-load_dotenv()
+client = Groq(api_key=os.getenv("GROQ_API_KEY"))
 
-client = genai.Client(api_key=os.getenv("GOOGLE_API_KEY"))
+def generate_article(transcript, length="medium"):
+    
+    length_map = {
+        "short": "around 300 words",
+        "medium": "around 600 words",
+        "long": "around 1000 words"
+    }
 
-def generate_article(summary):
     prompt = f"""
-    Convert the following summary into a professional article with:
+Convert the following YouTube transcript into a professional article.
 
-    - Title
-    - Introduction
-    - Key Insights (bullet points)
-    - Detailed Explanation
-    - Conclusion
+Requirements:
+- Title
+- Introduction
+- Key Insights (bullet points)
+- Detailed Explanation
+- Conclusion
 
-    Summary:
-    {summary}
-    """
+Length: {length_map[length]}
 
-    response = client.models.generate_content(
-        model="gemini-2.5-flash",
-        contents=prompt
+Transcript:
+{transcript}
+"""
+
+    response = client.chat.completions.create(
+        model="llama3-70b-8192",
+        messages=[{"role": "user", "content": prompt}],
+        temperature=0.7
     )
 
-    return response.text
+    return response.choices[0].message.content

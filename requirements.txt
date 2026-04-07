@@ -1,6 +1,5 @@
 streamlit
 youtube-transcript-api
-google-genai
 fpdf
 python-dotenv
 groq
