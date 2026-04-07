@@ -1,6 +1,5 @@
 from fpdf import FPDF
 
-# ---------- CLEAN TEXT ----------
 def clean_text(text):
     replacements = {
         "–": "-", "—": "-", "−": "-",
@@ -15,7 +14,6 @@ def clean_text(text):
     return text.encode("latin-1", "replace").decode("latin-1")
 
 
-# ---------- PDF CLASS ----------
 class PDF(FPDF):
     def header(self):
         self.set_font("Arial", "B", 16)
@@ -30,7 +28,6 @@ class PDF(FPDF):
         self.cell(0, 10, f"Page {self.page_no()}", align="C")
 
 
-# ---------- CREATE PDF ----------
 def create_pdf(text):
     pdf = PDF()
     pdf.set_auto_page_break(auto=True, margin=15)
@@ -45,34 +42,24 @@ def create_pdf(text):
             pdf.ln(3)
             continue
 
-        # TITLE
         if line.lower().startswith("title"):
             pdf.set_font("Arial", "B", 16)
-            pdf.set_text_color(0, 0, 0)
             pdf.multi_cell(0, 10, line.replace("TITLE:", "").strip())
             pdf.ln(3)
 
-        # HEADINGS
         elif line.isupper():
             pdf.set_font("Arial", "B", 14)
             pdf.set_text_color(13, 71, 161)
             pdf.ln(2)
             pdf.multi_cell(0, 8, line)
 
-        # BULLETS
         elif line.startswith("-") or line.startswith("•"):
             pdf.set_font("Arial", size=12)
-            pdf.set_text_color(0, 0, 0)
-            bullet = "• " + line.lstrip("-• ").strip()
+            bullet = "- " + line.lstrip("-• ").strip()
             pdf.multi_cell(0, 7, bullet)
 
-        # NORMAL TEXT
         else:
             pdf.set_font("Arial", size=12)
-            pdf.set_text_color(0, 0, 0)
             pdf.multi_cell(0, 7, line)
 
-    # 🔥 IMPORTANT FIX (for Streamlit)
-    pdf_bytes = pdf.output(dest="S").encode("latin-1")
-
-    return pdf_bytes
+    return pdf.output(dest="S").encode("latin-1")
