@@ -2,21 +2,26 @@ from fpdf import FPDF
 
 # ---------- CLEAN TEXT (Fix Unicode Issue) ----------
 def clean_text(text):
+    # Replace common problematic Unicode characters
     replacements = {
         "–": "-",   # en dash
         "—": "-",   # em dash
-        "‘": "'",   # left quote
-        "’": "'",   # right quote
+        "−": "-",   # minus sign
+        "‘": "'",   # left single quote
+        "’": "'",   # right single quote
         "“": '"',   # left double quote
         "”": '"',   # right double quote
         "•": "-",   # bullet
+        "…": "...", # ellipsis
     }
 
     for key, value in replacements.items():
         text = text.replace(key, value)
 
-    return text.encode("latin-1", "ignore").decode("latin-1")
+    # FINAL SAFETY: remove ANY unsupported characters
+    text = text.encode("latin-1", "replace").decode("latin-1")
 
+    return text
 
 # ---------- CUSTOM PDF CLASS ----------
 class PDF(FPDF):
