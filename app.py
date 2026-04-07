@@ -1,6 +1,6 @@
 import streamlit as st
 from transcript import get_transcript
-from article_generator import generate_article_with_groq
+from article_generator import generate_article
 from pdf_generator import create_pdf
 import os
 
@@ -26,7 +26,7 @@ if st.button("🚀 Generate Article & PDF"):
             if "⚠️" in transcript:
                 st.error(transcript)
             else:
-                article = generate_article_with_groq(transcript, length)
+                article = generate_article(transcript, length)
                 create_pdf(article)
 
                 st.success("✅ Article Generated!")
