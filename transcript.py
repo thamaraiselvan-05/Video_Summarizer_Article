@@ -14,23 +14,25 @@ def get_video_id(url):
     else:
         raise ValueError("Invalid YouTube URL")
 
+
 def get_transcript(url):
     video_id = get_video_id(url)
 
     try:
-        api = YouTubeTranscriptApi()
-        transcript = api.fetch(video_id)
-        text = " ".join([i.text for i in transcript])
+        # ✅ USE THIS (more reliable)
+        transcript = YouTubeTranscriptApi.get_transcript(video_id, languages=['en'])
+
+        text = " ".join([i['text'] for i in transcript])
         return text
 
     except RequestBlocked:
-        return "⚠️ YouTube blocked transcript access. Please try another video."
+        return "⚠️ YouTube blocked transcript access. Try another video."
 
     except TranscriptsDisabled:
         return "⚠️ Transcripts are disabled for this video."
 
     except NoTranscriptFound:
-        return "⚠️ No transcript available for this video."
+        return "⚠️ No transcript available."
 
     except Exception as e:
-        return f"⚠️ Error: {str(e)}"
+        return "⚠️ Unable to fetch transcript. Try another video."
