@@ -10,14 +10,8 @@ st.title("🎬 YouTube → Article & PDF Generator")
 
 url = st.text_input("🔗 Enter YouTube URL")
 
-col1, col2 = st.columns(2)
-
-with col1:
-    style = st.selectbox("Article Style", ["Informative Blog"])
-
-with col2:
-    length = st.selectbox(
-    "Article Length",
+length = st.selectbox(
+    "Select Article Length",
     ["short", "medium", "long"])
 
 if st.button("🚀 Generate Article & PDF"):
