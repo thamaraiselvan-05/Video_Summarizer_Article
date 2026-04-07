@@ -18,7 +18,7 @@ with col1:
 with col2:
     length = st.selectbox(
         "Article Length",
-        ["short", "medium", "long"]
+        ["Short", "Medium", "Long"]
     )
 
 if st.button("🚀 Generate Article & PDF"):
