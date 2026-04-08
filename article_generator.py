@@ -1,27 +1,27 @@
+import streamlit as st
 from groq import Groq
 import os
+from dotenv import load_dotenv
+load_dotenv()
+api_key = os.getenv("GROQ_API_KEY") 
 
-client = Groq(api_key=os.getenv("GROQ_API_KEY"))
+client = Groq(api_key=api_key)
 
-def generate_article(transcript, length="medium"):
-    length = length.lower()
-    length_map = {
-        "short": "Around 300 words",
-        "medium": "Around 600 words",
-        "long": "Around 1000 words"
-    }
-
+def generate_article(transcript):
+    
     prompt = f"""
 Convert the following YouTube transcript into a professional article.
 
 Requirements:
+Use plain text (no ** symbols)
+
 - Title
 - Introduction
 - Key Insights (bullet points)
 - Detailed Explanation
 - Conclusion
 
-Length: {length_map[length]}
+Length: Around 1000 words
 
 Transcript:
 {transcript}
