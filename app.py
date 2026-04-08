@@ -144,7 +144,6 @@ if st.session_state.generated:
     st.subheader("📄 Generated Article")
     st.text_area("", article, height=400)
 
-    # ✅ CLEAR BUTTON (ADDED)
     st.markdown("---")
     if st.button("🔄 Clear & Start New"):
         st.session_state.clear()
