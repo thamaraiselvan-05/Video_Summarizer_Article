@@ -94,7 +94,6 @@ if st.button("🚀 Generate Article & PDF"):
                 st.error(error)
 
             else:
-                # ✅ STORE IN SESSION (ADDED)
                 st.session_state.generated = True
                 st.session_state.transcript = transcript
                 st.session_state.title = title
