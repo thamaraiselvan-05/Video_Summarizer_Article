@@ -14,8 +14,6 @@ def extract_video_id(url: str):
             return match.group(1)
     return None
 
-
-# ---------- GET TRANSCRIPT + TITLE ----------
 def get_transcript(url: str):
     video_id = extract_video_id(url)
 
